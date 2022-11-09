@@ -1,0 +1,36 @@
+import theoffi.*
+
+/*
+ * 
+ * Queremos conocer el sueldo mensual de un empleado, que se calcula como:
+ * un sueldo base que depende del cargo ocupado + 100 * los años de antigüedad en la empresa.
+
+Los sueldos bases de los cargos dependen de la cantidad de horas trabajadas por día,
+* que podría variar entre 4 y 8hs, y se calcula como el sueldo por hora del cargo
+*  * la cantidad de horas * los dias laborables promedio por mes, que son 22.
+Los sueldos por hora según cargo son:
+recepcionista: 15.
+pasante: 10. Lo que sí, en esta empresa tomaron la ̶i̶l̶e̶g̶a̶l̶ polémica decisión de no pagar a los pasantes los días de estudio que se tomen. Por lo que sus días laborables son la cantidad usual menos los días de estudio que se hayan pedido.
+gerente: 8 * la cantidad de colegas que tiene, es decir, de gente que trabaja en su sucursal (sin incluirse).
+ 
+ */
+ 
+describe "Sueldos"{
+	test "El sueldo mensual de un empleado recepcionista con 5 años de antiguedad y 4 horas diaras es 1820"{
+		const empleado = new Empleado(antiguedad = 5, cargoOcupado = new Recepcionista(), personalidad = new Competitiva())
+		
+		assert.equals(1820, empleado.sueldoMensual(4))
+	}
+	
+	test "El sueldo mensual de un empleado gerente con 5 años de antiguedad y 4 horas diaras es 4020"{
+		const empleado = new Empleado(antiguedad = 5, cargoOcupado = new Gerente(cantidadColegas = 5), personalidad = new Competitiva())
+		
+		assert.equals(4020, empleado.sueldoMensual(4))
+		
+		assert.that(empleado.sueldoMensual(4) == 4020)
+		
+		assert.notThat(empleado.sueldoMensual(4) != 4020)
+		
+		assert.notThat(empleado.sueldoMensual(4) != 4020)		
+	}
+}
