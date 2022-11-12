@@ -1,0 +1,20 @@
+import modeloAsado.*
+/*
+describe "Punto 1"{	
+	const persona = new Persona(posicion = new Posicion(elementosCerca = [sal,aceite]), criterio = lePasanElemento)
+	const otraPersona = new Persona(posicion = new Posicion(elementosCerca = [aceite]), criterio = lePasanElemento)
+
+	test "se pueden consultar la posicion de cada persona"{
+        assert.equals([sal,aceite], persona.posicion().elementosCerca())		
+	}
+
+	test "se pueden consultar los elementos que una persona tiene cerca"{
+		assert.equals([sal, aceite], persona.posicion().elementosCerca())
+	}
+
+	test "una persona lePasanElemento le puede pedir a otra que le pase una cosa"{
+		otraPersona.pasameLa(persona, sal)
+        
+        assert.equals([aceite, sal], otraPersona.posicion().elementosCerca())
+    }
+}*/
