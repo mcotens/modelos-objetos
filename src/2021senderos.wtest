@@ -1,0 +1,100 @@
+import 2021senderos.*
+
+describe "Lugares"{
+	test "un lugar se conecta a su destino si alguno de sus senderos lleva a ese destino"{
+		assert.that(museo.seConecta(casaJim))
+	}
+	
+	test "el tiempo en recorrer un camino es la cantidad de kilometros sobre la velocidad de la persona"{
+		assert.equals(4, aja.tiempoEnRecorrer(casaJim))
+	}
+	
+	test "si el origen del habitante no se conecta con el destino, lanza un error"{
+		assert.throwsExceptionWithMessage("El lugar no se conecta con ese destino.", {aja.tiempoEnRecorrer(mercadoTroll)})
+	}
+	
+	test "si aja intenta viajar de la casa de jim hasta el mercado troll, son 3 horas"{
+		aja.origen(casaJim)
+		
+		assert.equals(3, aja.tiempoEnRecorrer(mercadoTroll))
+	}
+	
+	test "si jim intenta viajar de su casa hasta el mercado troll, son 4 horas"{
+		assert.equals(4, jim.tiempoEnRecorrer(mercadoTroll))
+	}
+	
+	test "si jim intenta viajar del mercado hasta el museo, son 1 hora"{
+		jim.origen(mercadoTroll)
+		
+		assert.equals(1, jim.tiempoEnRecorrer(museo))
+	}
+	
+	test "el destino mas cercano a jim es la casa de clara"{
+		assert.equals(casaClara, jim.destinoMasCercano())
+	}
+}
+
+describe "Tareas"{
+	test "si un habitante no cumple el requisito de una tarea, falla"{
+		assert.throwsExceptionWithMessage("El lugar no se conecta con ese destino.", {aja.realizarTarea(moverseACasaClara)})
+	}
+	
+	test "si aja realizo dos tareas de 3hs e intentase tomar otra de 3 hs, esta ultima falla"{
+		aja.origen(casaJim)
+		aja.realizarTarea(moverseAMercadoTroll)
+		
+		aja.origen(casaJim)
+		aja.realizarTarea(moverseAMercadoTroll)
+		
+		aja.origen(casaJim)
+		
+		assert.throwsExceptionWithMessage("La persona no tiene las horas necesarias.", {aja.realizarTarea(moverseAMercadoTroll)})
+	}
+	
+	test "al moverse a un lugar, su lugar cambia a ese destino"{
+		aja.origen(casaJim)
+		
+		aja.realizarTarea(moverseAMercadoTroll)
+		
+		assert.equals(mercadoTroll, aja.origen())
+	}
+	
+	test "si jim se quiere mover al destino mas cercano, se mueve a la casa de clara"{
+		jim.realizarTarea(new MoverseAlDestinoMasCercano(persona = jim))
+		
+		assert.equals(casaClara, jim.origen())
+	}
+	
+	test "si un habitante usa un instrumento sobre otro que no esta en el mismo lugar, falla"{
+		jim.origen(museo)
+		clara.origen(casaClara)
+		
+		assert.throwsExceptionWithMessage("La persona no cumple los requisitos de la tarea.", {jim.realizarTarea(new UsarInstrumento(instrumento = new Kairosecto(), objetivo = clara))})
+	}
+	
+	test "si un habitante usa un kairosecto sobre otro, el primero gasta una hora y el objetivo gana 3 horas"{
+		jim.origen(museo)
+		clara.origen(museo)
+		
+		jim.realizarTarea(new UsarInstrumento(instrumento = new Kairosecto(), objetivo = clara))
+		
+		assert.equals(6, jim.tiempoTotal())
+		assert.equals(8, clara.tiempoTotal())	
+	}
+	
+	test "si un habitante usa un baculo de mercadoTroll sobre otro, el primero gasta la mitad de sus horas y el objetivo se traslada al mercadoTroll"{
+		jim.origen(museo)
+		clara.origen(museo)
+		
+		jim.realizarTarea(new UsarInstrumento(instrumento = baculoAlMercadoTroll, objetivo = clara))
+		
+		assert.equals(3.5, jim.tiempoTotal())
+		assert.equals(mercadoTroll, clara.origen())	
+	}
+	
+	test "si un habitante usa un kairosecto sobre si mismo, no falla y suma dos horas"{	
+		jim.realizarTarea(new UsarInstrumento(instrumento = kairosecto, objetivo = jim))
+			
+		assert.equals(9, jim.tiempoTotal())
+	}
+}
